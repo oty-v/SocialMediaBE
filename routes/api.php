@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\PostController;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,7 +14,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/users', function () {
-    $jsonString = file_get_contents(base_path('resources/users.json'));
-    return json_decode($jsonString, true);
+Route::get('posts', [PostController::class, 'index']);
+Route::prefix('post')->group(function () {
+    Route::post('/', [PostController::class, 'store']);
+    Route::put('/{id}', [PostController::class, 'update']);
+    Route::delete('/{id}', [PostController::class, 'delete']);
 });
