@@ -14,9 +14,10 @@ use App\Http\Controllers\PostController;
 |
 */
 
-Route::get('posts', [PostController::class, 'index']);
-Route::prefix('post')->group(function () {
+Route::prefix('posts')->group(function () {
+    Route::get('/', [PostController::class, 'index']);
+    Route::get('/{post}', [PostController::class, 'show']);
     Route::post('/', [PostController::class, 'store']);
-    Route::put('/{id}', [PostController::class, 'update']);
-    Route::delete('/{id}', [PostController::class, 'delete']);
+    Route::put('/{post}', [PostController::class, 'update']);
+    Route::delete('/{post}', [PostController::class, 'delete']);
 });
