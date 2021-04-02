@@ -20,4 +20,5 @@ Route::post('/login', [UserController::class, 'login']);
 
 Route::group(['middleware'=>['auth:sanctum']], function () {
     Route::apiResource('posts', PostController::class);
+    Route::post('/logout', [UserController::class, 'logout']);
 });
