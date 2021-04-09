@@ -15,5 +15,14 @@ class Post extends Model
     protected $fillable = [
         'username',
         'content',
+        'user_id',
     ];
+
+    /**
+     * Get the parent post model user.
+     */
+    public function commentable()
+    {
+        return $this->morphTo();
+    }
 }

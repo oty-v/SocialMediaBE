@@ -25,6 +25,10 @@ class PostController extends Controller
      * @return Response
      */
     public function store(Request $request) {
+        $userId = auth()->id();
+        $userName = auth()->user()->username;
+        $request['user_id'] = $userId;
+        $request['username'] = $userName;
         return Post::create($request->all());
     }
 
