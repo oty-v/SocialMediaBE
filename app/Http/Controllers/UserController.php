@@ -2,48 +2,31 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\User;
-use Illuminate\Support\Facades\Hash;
+use App\Http\Resources\UserResource;
+use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class UserController extends Controller
 {
-    public function register(Request $request)
+    /**
+     * Display a listing of the resource.
+     *
+     * @return UserResource
+     */
+    public function index(): AnonymousResourceCollection
     {
-        $fields = $request->validate([
-            'username' => 'required',
-            'email' => 'required|email|unique:users',
-            'password' => 'required|confirmed'
-        ]);
-
-        $fields['password'] = Hash::make($request->password);
-
-        $user = User::create($fields);
-
-        $token = $user->createToken('authToken')->plainTextToken;
-
-        return response(['user' => $user, 'token' => $token], 201);
+        return UserResource::collection(User::all());
     }
 
-    public function login(Request $request)
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param User $user
+     * @return UserResource
+     */
+    public function show(User $user): UserResource
     {
-        $fields = $request->validate([
-            'email' => 'email|required',
-            'password' => 'required'
-        ]);
-
-        if (!auth()->attempt($fields)) {
-            return response(['message' => 'This User does not exist, check your details'], 400);
-        }
-
-        $token = auth()->user()->createToken('authToken')->plainTextToken;
-
-        return response(['user' => auth()->user(), 'access_token' => $token], 201);
-    }
-
-    public function logout(Request $request)
-    {
-        auth()->user()->tokens()->delete();
-        return response(['message' => 'Logged out']);
+        return new UserResource($user);
     }
 }

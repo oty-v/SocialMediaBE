@@ -2,7 +2,9 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PostController;
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\ProfileController;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,10 +17,21 @@ use App\Http\Controllers\UserController;
 |
 */
 
-Route::post('/register', [UserController::class, 'register']);
-Route::post('/login', [UserController::class, 'login']);
+Route::post('/register', [AuthController::class, 'register']);
+Route::post('/login', [AuthController::class, 'login']);
 
-Route::group(['middleware'=>['auth:sanctum']], function () {
-    Route::apiResource('posts', PostController::class);
-    Route::post('/logout', [UserController::class, 'logout']);
+Route::group(['middleware' => ['auth:sanctum']], function () {
+    Route::group(['prefix' => '/posts'], function () {
+        Route::post('/', [PostController::class, 'store']);
+        Route::get('/{post}', [PostController::class, 'show']);
+        Route::put("/{post}", [PostController::class, 'update']);
+        Route::delete("/{post}", [PostController::class, 'destroy']);
+    });
+    Route::group(['prefix' => '/users'], function () {
+        Route::get("/", [UserController::class, 'index']);
+        Route::get("/{user}", [UserController::class, 'show']);
+        Route::get("/{user}/posts", [PostController::class, 'index']);
+    });
+    Route::get('/profile', [ProfileController::class, 'index']);
+    Route::post('/logout', [AuthController::class, 'logout']);
 });

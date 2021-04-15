@@ -13,16 +13,11 @@ class Post extends Model
      * @var array
      */
     protected $fillable = [
-        'username',
         'content',
-        'user_id',
     ];
 
-    /**
-     * Get the parent post model user.
-     */
-    public function commentable()
+    public function user()
     {
-        return $this->morphTo();
+        return $this->belongsTo(User::class);
     }
 }
