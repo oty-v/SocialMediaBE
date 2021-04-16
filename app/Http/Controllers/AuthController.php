@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\TokenResource;
 use Illuminate\Http\Request;
 use App\Models\User;
 
 class AuthController extends Controller
 {
-    public function register(Request $request)
+    public function register(Request $request): TokenResource
     {
         $fields = $request->validate([
             'username' => 'required',
@@ -17,12 +18,10 @@ class AuthController extends Controller
 
         $user = User::create($fields);
 
-        $token = $user->createToken('')->plainTextToken;
-
-        return response($token, 201);
+        return new TokenResource($user);
     }
 
-    public function login(Request $request)
+    public function login(Request $request): TokenResource
     {
         $fields = $request->validate([
             'email' => 'email|required',
@@ -30,17 +29,15 @@ class AuthController extends Controller
         ]);
 
         if (!auth()->attempt($fields)) {
-            return response('', 400);
+            return response()->status(401);
         }
 
-        $token = auth()->user()->createToken('')->plainTextToken;
-
-        return response(['user' => auth()->user(), 'access_token' => $token], 200);
+        return new TokenResource(auth()->user());
     }
 
     public function logout(Request $request)
     {
         $request->user()->currentAccessToken()->delete();
-        return response('',200);
+        return response()->noContent();
     }
 }

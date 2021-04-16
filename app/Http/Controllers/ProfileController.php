@@ -10,6 +10,6 @@ class ProfileController extends Controller
 {
     public function index(): ProfileResource
     {
-        return new ProfileResource(Auth::User());
+        return new ProfileResource(Auth::user());
     }
 }
