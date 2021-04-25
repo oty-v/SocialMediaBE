@@ -2,19 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\LoginRequest;
+use App\Http\Requests\RegisterRequest;
 use App\Http\Resources\AuthTokenResource;
 use Illuminate\Http\Request;
 use App\Models\User;
 
 class AuthController extends Controller
 {
-    public function register(Request $request): AuthTokenResource
+    public function register(RegisterRequest $request): AuthTokenResource
     {
-        $fields = $request->validate([
-            'username' => 'required',
-            'email' => 'required|email|unique:users',
-            'password' => 'required|confirmed'
-        ]);
+        $fields = $request->validate();
 
         $user = User::create($fields);
 
@@ -23,12 +21,9 @@ class AuthController extends Controller
         return new AuthTokenResource($token);
     }
 
-    public function login(Request $request): AuthTokenResource
+    public function login(LoginRequest $request): AuthTokenResource
     {
-        $fields = $request->validate([
-            'email' => 'email|required',
-            'password' => 'required'
-        ]);
+        $fields = $request->validate();
 
         if (!auth()->attempt($fields)) {
             return response()->status(401);
