@@ -31,7 +31,7 @@ class PostController extends Controller
      */
     public function store(StorePostRequest $request): PostResource
     {
-        return new PostResource($request->user()->posts()->create($request->all()));
+        return new PostResource($request->user()->posts()->create($request->validated()));
     }
 
     /**
@@ -54,7 +54,7 @@ class PostController extends Controller
      */
     public function update(UpdatePostRequest $request, Post $post): PostResource
     {
-        $post->update($request->all());
+        $post->update($request->validated());
         return new PostResource($post);
     }
 

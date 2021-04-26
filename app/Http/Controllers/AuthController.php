@@ -12,7 +12,7 @@ class AuthController extends Controller
 {
     public function register(RegisterRequest $request): AuthTokenResource
     {
-        $fields = $request->validate();
+        $fields = $request->validated();
 
         $user = User::create($fields);
 
@@ -23,7 +23,7 @@ class AuthController extends Controller
 
     public function login(LoginRequest $request): AuthTokenResource
     {
-        $fields = $request->validate();
+        $fields = $request->validated();
 
         if (!auth()->attempt($fields)) {
             return response()->status(401);
