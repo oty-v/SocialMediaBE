@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StorePostRequest;
+use App\Http\Requests\UpdatePostRequest;
 use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
@@ -27,9 +29,9 @@ class PostController extends Controller
      * @param Request $request
      * @return PostResource
      */
-    public function store(Request $request): PostResource
+    public function store(StorePostRequest $request): PostResource
     {
-        return new PostResource($request->user()->posts()->create($request->all()));
+        return new PostResource($request->user()->posts()->create($request->validated()));
     }
 
     /**
@@ -50,9 +52,9 @@ class PostController extends Controller
      * @param Post $post
      * @return PostResource
      */
-    public function update(Request $request, Post $post): PostResource
+    public function update(UpdatePostRequest $request, Post $post): PostResource
     {
-        $post->update($request->all());
+        $post->update($request->validated());
         return new PostResource($post);
     }
 
