@@ -5,6 +5,7 @@ use App\Http\Controllers\PostController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\CommentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -26,6 +27,13 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::get('/{post}', [PostController::class, 'show']);
         Route::put("/{post}", [PostController::class, 'update']);
         Route::delete("/{post}", [PostController::class, 'destroy']);
+        Route::group(['prefix' => '/{post}/comments'], function () {
+            Route::get("/", [CommentController::class, 'index']);
+            Route::post('/', [CommentController::class, 'store']);
+            Route::get('/{post}', [CommentController::class, 'show']);
+            Route::put("/{post}", [CommentController::class, 'update']);
+            Route::delete("/{post}", [CommentController::class, 'destroy']);
+        });
     });
     Route::group(['prefix' => '/users'], function () {
         Route::get("/", [UserController::class, 'index']);
