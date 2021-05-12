@@ -19,7 +19,9 @@ class CommentController extends Controller
 
     public function store(StoreCommentRequest $request, Post $post): CommentResource
     {
-
+        $comment = $request->user()->comments()->make($request->validated());
+        $comment = $post->comments()->save($comment);
+        return new CommentResource($comment);
     }
 
 

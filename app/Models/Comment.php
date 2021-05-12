@@ -18,8 +18,8 @@ class Comment extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function replies()
+    public function post()
     {
-        return $this->hasMany(Comment::class, 'parent_id');
+        return $this->belongsTo(Post::class);
     }
 }
