@@ -11,24 +11,6 @@ class CommentPolicy
     use HandlesAuthorization;
 
 
-    public function viewAny(User $user)
-    {
-        return true;
-    }
-
-
-    public function view(User $user, Comment $comment)
-    {
-        return true;
-    }
-
-
-    public function create(User $user)
-    {
-        return true;
-    }
-
-
     public function update(User $user, Comment $comment)
     {
         return $user->id === $comment->user_id;

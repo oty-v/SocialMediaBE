@@ -11,10 +11,6 @@ use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class CommentController extends Controller
 {
-    public function __construct() {
-        $this->authorizeResource(Comment::class, 'comment');
-    }
-
     public function index(Post $post): AnonymousResourceCollection
     {
         return CommentResource::collection($post->comments);
