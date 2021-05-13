@@ -25,8 +25,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::group(['prefix' => '/posts'], function () {
         Route::post('/', [PostController::class, 'store']);
         Route::get('/{post}', [PostController::class, 'show']);
-        Route::put("/{post}", [PostController::class, 'update']);
-        Route::delete("/{post}", [PostController::class, 'destroy']);
+        Route::put("/{post}", [PostController::class, 'update'])->middleware('can:update,post');
+        Route::delete("/{post}", [PostController::class, 'destroy'])->middleware('can:delete,post');
         Route::group(['prefix' => '/{post}/comments'], function () {
             Route::get("/", [CommentController::class, 'index']);
             Route::post('/', [CommentController::class, 'store']);
@@ -34,8 +34,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     });
     Route::group(['prefix' => '/comments'], function () {
         Route::get('/{comment}', [CommentController::class, 'show']);
-        Route::put("/{comment}", [CommentController::class, 'update']);
-        Route::delete("/{comment}", [CommentController::class, 'destroy']);
+        Route::put("/{comment}", [CommentController::class, 'update'])->middleware('can:update,post');
+        Route::delete("/{comment}", [CommentController::class, 'destroy'])->middleware('can:delete,post');
     });
     Route::group(['prefix' => '/users'], function () {
         Route::get("/", [UserController::class, 'index']);
