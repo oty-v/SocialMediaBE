@@ -34,8 +34,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     });
     Route::group(['prefix' => '/comments'], function () {
         Route::get('/{comment}', [CommentController::class, 'show']);
-        Route::put("/{comment}", [CommentController::class, 'update'])->middleware('can:update,post');
-        Route::delete("/{comment}", [CommentController::class, 'destroy'])->middleware('can:delete,post');
+        Route::put("/{comment}", [CommentController::class, 'update'])->middleware('can:update,comment');
+        Route::delete("/{comment}", [CommentController::class, 'destroy'])->middleware('can:delete,comment');
     });
     Route::group(['prefix' => '/users'], function () {
         Route::get("/", [UserController::class, 'index']);

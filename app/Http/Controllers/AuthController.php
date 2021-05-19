@@ -26,7 +26,7 @@ class AuthController extends Controller
         $credentials = $request->validated();
 
         if (!auth()->attempt($credentials)) {
-            return response()->status(401);
+            return abort(401);
         }
 
         $token = auth()->user()->createToken($request->header('User-Agent'));
