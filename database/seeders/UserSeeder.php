@@ -14,13 +14,11 @@ class UserSeeder extends Seeder
      */
     public function run()
     {
-        User::factory()
-            ->hasPosts(1)
-            ->hasComments(1)
-            ->create([
+        User::factory()->create([
                 'username' => 'username',
                 'email' => 'email@example.com',
-                'password' => bcrypt('password'),
+                'password' => 'password',
             ]);
+        User::factory()->count(3)->create();
     }
 }
