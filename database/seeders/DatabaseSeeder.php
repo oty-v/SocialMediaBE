@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Comment;
 use App\Models\Post;
 use App\Models\User;
 use Illuminate\Database\Seeder;
@@ -15,13 +16,10 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('users')->insert([
-            'username' => 'username',
-            'email' => 'email@example.com',
-            'password' => Hash::make('password'),
+        $this->call([
+            UserSeeder::class,
+            PostSeeder::class,
+            CommentSeeder::class,
         ]);
-        User::factory()->count(3)
-            ->has(Post::factory()->count(3))
-            ->create();
     }
 }
