@@ -16,11 +16,10 @@ class CommentSeeder extends Seeder
      */
     public function run()
     {
-        $user = User::all();
-        Post::all()->each(function ($post) use ($user) {
-            $post->comments()->saveMany(
-                Comment::factory()->count(3)->for($post)->for($user->random())->create()
-            );
+        User::all()->each(function ($user){
+            Post::all()->each(function ($post) use ($user){
+                Comment::factory()->count(1)->for($post)->for($user)->create();
+            });
         });
     }
 }
