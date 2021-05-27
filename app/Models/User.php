@@ -44,9 +44,11 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    /**
-     * Get the comments for the blog post.
-     */
+    public function profile()
+    {
+        return $this->hasOne(Profile::class);
+    }
+
     public function posts()
     {
         return $this->hasMany(Post::class);
