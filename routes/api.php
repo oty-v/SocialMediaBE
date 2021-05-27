@@ -42,7 +42,9 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::get("/{user:username}", [UserController::class, 'show']);
         Route::get("/{user:username}/posts", [PostController::class, 'index']);
     });
-    Route::get('/profile', [ProfileController::class, 'index']);
-    Route::put('/profile', [ProfileController::class, 'update']);
+    Route::group(['prefix' => '/profiles'], function () {
+        Route::get('/', [ProfileController::class, 'index']);
+        Route::put('/{profile}', [ProfileController::class, 'update']);
+    });
     Route::post('/logout', [AuthController::class, 'logout']);
 });

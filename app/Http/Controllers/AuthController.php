@@ -16,6 +16,8 @@ class AuthController extends Controller
 
         $user = User::create($userData);
 
+        $user->profile()->create();
+
         $token = $user->createToken($request->header('User-Agent'));
 
         return new AuthTokenResource($token);
