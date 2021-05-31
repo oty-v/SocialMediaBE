@@ -27,7 +27,9 @@ class Profile extends Model
 
     public function getAvatarUrlAttribute()
     {
-        return url($this->avatar);
+        if ($this->avatar) {
+            return url($this->avatar);
+        }
     }
 
     public function setAvatarAttribute($value)
