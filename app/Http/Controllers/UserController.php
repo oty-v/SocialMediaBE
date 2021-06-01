@@ -17,7 +17,7 @@ class UserController extends Controller
      */
     public function index(SearchUserRequest $request): AnonymousResourceCollection
     {
-        $users = User::ofSearch($request->search)->orderBy('username')->paginate(5);
+        $users = User::whereUsername($request->username)->orderBy('username')->paginate(5);
         return UserResource::collection($users);
     }
 

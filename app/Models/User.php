@@ -44,9 +44,10 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public function scopeOfSearch($query, $search)
+
+    public function scopeWhereUsername($query, $userName)
     {
-        return $query->where("username", 'LIKE', "%{$search}%");
+        return $userName ? $query->where("username", "LIKE", "%".$userName."%") : $query;
     }
 
     public function profile()

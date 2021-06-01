@@ -24,7 +24,7 @@ class SearchUserRequest extends FormRequest
     public function rules()
     {
         return [
-            'search' => 'string|max:25'
+            'username' => 'string|max:25'
         ];
     }
 }
