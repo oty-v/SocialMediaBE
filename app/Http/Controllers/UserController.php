@@ -15,15 +15,9 @@ class UserController extends Controller
      *
      * @return UserResource
      */
-    public function index(): AnonymousResourceCollection
+    public function index(SearchUserRequest $request): AnonymousResourceCollection
     {
-        $users = User::orderBy('id')->paginate(5);
-        return UserResource::collection($users);
-    }
-
-    public function search(SearchUserRequest $request): AnonymousResourceCollection
-    {
-        $users = User::where("username", 'LIKE', "%{$request->search}%")->orderBy('id')->paginate(5);
+        $users = User::ofSearch($request->search)->orderBy('username')->paginate(5);
         return UserResource::collection($users);
     }
 

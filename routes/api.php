@@ -39,7 +39,6 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     });
     Route::group(['prefix' => '/users'], function () {
         Route::get("/", [UserController::class, 'index']);
-        Route::post("/", [UserController::class, 'search']);
         Route::get("/{user:username}", [UserController::class, 'show']);
         Route::get("/{user:username}/posts", [PostController::class, 'index']);
     });

@@ -44,6 +44,11 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    public function scopeOfSearch($query, $search)
+    {
+        return $query->where("username", 'LIKE', "%{$search}%");
+    }
+
     public function profile()
     {
         return $this->hasOne(Profile::class);
