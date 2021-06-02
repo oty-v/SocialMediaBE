@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\SearchUserRequest;
 use App\Models\User;
 use App\Http\Resources\UserResource;
 use Illuminate\Http\Request;
@@ -14,9 +15,10 @@ class UserController extends Controller
      *
      * @return UserResource
      */
-    public function index(): AnonymousResourceCollection
+    public function index(SearchUserRequest $request): AnonymousResourceCollection
     {
-        return UserResource::collection(User::all());
+        $users = User::whereUsername($request->username)->orderBy('username')->paginate(5);
+        return UserResource::collection($users);
     }
 
     /**
