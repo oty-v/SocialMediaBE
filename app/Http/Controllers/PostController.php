@@ -20,7 +20,7 @@ class PostController extends Controller
      */
     public function index(User $user): AnonymousResourceCollection
     {
-        $posts = $user->posts()->orderBy('id', 'desc')->cursorPaginate(10);
+        $posts = $user->posts()->orderBy('id', 'desc')->simplePaginate(10);
         return PostResource::collection($posts);
     }
 
