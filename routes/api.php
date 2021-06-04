@@ -38,9 +38,9 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::delete("/{comment}", [CommentController::class, 'destroy'])->middleware('can:delete,comment');
     });
     Route::group(['prefix' => '/users'], function () {
-        Route::post("/", [UserController::class, 'index']);
+        Route::get("/", [UserController::class, 'index']);
         Route::get("/{user:username}", [UserController::class, 'show']);
-        Route::post("/{user:username}/posts", [PostController::class, 'index']);
+        Route::get("/{user:username}/posts", [PostController::class, 'index']);
     });
     Route::get('/profile', [ProfileController::class, 'index']);
     Route::put('/profiles/{profile}', [ProfileController::class, 'update']);
