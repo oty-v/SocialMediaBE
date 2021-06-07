@@ -16,6 +16,7 @@ class Post extends Model
      */
     protected $fillable = [
         'content',
+        'tag',
     ];
 
     public function user()
@@ -26,5 +27,10 @@ class Post extends Model
     public function comments()
     {
         return $this->hasMany(Comment::class);
+    }
+
+    public function tags()
+    {
+        return $this->morphToMany(Tag::class, 'taggable');
     }
 }

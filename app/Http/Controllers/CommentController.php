@@ -7,6 +7,7 @@ use App\Http\Requests\UpdateCommentRequest;
 use App\Models\Comment;
 use App\Models\Post;
 use App\Http\Resources\CommentResource;
+use App\Models\Tag;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class CommentController extends Controller
@@ -21,6 +22,14 @@ class CommentController extends Controller
     {
         $comment = $request->user()->comments()->make($request->validated());
         $comment = $post->comments()->save($comment);
+        foreach ($request->tags as $tag) {
+            $tag_exist = Tag::whereName($tag)->first();
+            if ($tag_exist) {
+                $comment->tags()->attach($tag_exist->id);
+            } else {
+                $comment->tags()->create($tag);
+            }
+        }
         return new CommentResource($comment);
     }
 
@@ -34,6 +43,14 @@ class CommentController extends Controller
     public function update(UpdateCommentRequest $request, Comment $comment): CommentResource
     {
         $comment->update($request->validated());
+        foreach ($request->tags as $tag) {
+            $tag_exist = Tag::whereName($tag)->first();
+            if ($tag_exist) {
+                $comment->tags()->attach($tag_exist->id);
+            } else {
+                $comment->tags()->create($tag);
+            }
+        }
         return new CommentResource($comment);
     }
 

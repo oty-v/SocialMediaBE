@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StorePostRequest;
+use App\Http\Requests\TagRequest;
 use App\Http\Requests\UpdatePostRequest;
+use App\Models\Tag;
 use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
@@ -32,7 +34,16 @@ class PostController extends Controller
      */
     public function store(StorePostRequest $request): PostResource
     {
-        return new PostResource($request->user()->posts()->create($request->validated()));
+        $post = $request->user()->posts()->create($request->validated());
+        foreach ($request->tags as $tag) {
+            $tag_exist = Tag::whereName($tag)->first();
+            if ($tag_exist) {
+                $post->tags()->attach($tag_exist->id);
+            } else {
+                $post->tags()->create($tag);
+            }
+        }
+        return new PostResource($post);
     }
 
     /**
@@ -56,6 +67,14 @@ class PostController extends Controller
     public function update(UpdatePostRequest $request, Post $post): PostResource
     {
         $post->update($request->validated());
+        foreach ($request->tags as $tag) {
+            $tag_exist = Tag::whereName($tag)->first();
+            if ($tag_exist) {
+                $post->tags()->attach($tag_exist->id);
+            } else {
+                $post->tags()->create($tag);
+            }
+        }
         return new PostResource($post);
     }
 
