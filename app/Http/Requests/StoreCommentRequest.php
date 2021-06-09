@@ -25,8 +25,6 @@ class StoreCommentRequest extends FormRequest
     {
         return [
             'body' => 'required|string|max:280',
-            'tags' => 'array',
-            '*.*.name' => 'string|max:15'
         ];
     }
 }

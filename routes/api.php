@@ -24,6 +24,7 @@ Route::post('/login', [AuthController::class, 'login']);
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::group(['prefix' => '/posts'], function () {
+        Route::get('/', [PostController::class, 'taggedPosts']);
         Route::post('/', [PostController::class, 'store']);
         Route::get('/{post}', [PostController::class, 'show']);
         Route::put("/{post}", [PostController::class, 'update'])->middleware('can:update,post');
@@ -43,7 +44,6 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::get("/{user:username}", [UserController::class, 'show']);
         Route::get("/{user:username}/posts", [PostController::class, 'index']);
     });
-    Route::get('/tags/{tag}', [TagController::class, 'index']);
     Route::get('/profile', [ProfileController::class, 'index']);
     Route::put('/profiles/{profile}', [ProfileController::class, 'update']);
     Route::post('/logout', [AuthController::class, 'logout']);

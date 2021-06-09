@@ -25,8 +25,6 @@ class UpdatePostRequest extends FormRequest
     {
         return [
             'content' => 'required|string|max:280',
-            'tags' => 'array',
-            '*.*.name' => 'string|max:15'
         ];
     }
 }

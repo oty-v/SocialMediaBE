@@ -3,18 +3,34 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StorePostRequest;
-use App\Http\Requests\TagRequest;
+use App\Http\Requests\TaggedPostRequest;
 use App\Http\Requests\UpdatePostRequest;
 use App\Models\Tag;
 use App\Models\User;
 use Exception;
-use Illuminate\Http\Request;
 use App\Models\Post;
 use App\Http\Resources\PostResource;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class PostController extends Controller
 {
+    public function taggedPosts(TaggedPostRequest $request): AnonymousResourceCollection
+    {
+        $posts = Post::whereHas(
+            'tags',
+            function (Builder $query) {
+                $query->whereName(request('tag'));
+            }
+        )->orWhereHas(
+            'comments.tags',
+            function (Builder $query) {
+                $query->whereName(request('tag'));
+            }
+        )->orderByDesc('id')->cursorPaginate(5);
+        return PostResource::collection($posts);
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -22,7 +38,7 @@ class PostController extends Controller
      */
     public function index(User $user): AnonymousResourceCollection
     {
-        $posts = $user->posts()->orderBy('id', 'desc')->cursorPaginate(5);
+        $posts = $user->posts()->orderByDesc('id')->cursorPaginate(5);
         return PostResource::collection($posts);
     }
 
@@ -35,13 +51,11 @@ class PostController extends Controller
     public function store(StorePostRequest $request): PostResource
     {
         $post = $request->user()->posts()->create($request->validated());
-        foreach ($request->tags as $tag) {
-            $tag_exist = Tag::whereName($tag)->first();
-            if ($tag_exist) {
-                $post->tags()->attach($tag_exist->id);
-            } else {
-                $post->tags()->create($tag);
-            }
+        $tags = [];
+        preg_match_all('/#(\w+)/i', request('content'), $tags);
+        foreach ($tags[0] as $tag) {
+            $tag_exist = Tag::whereName($tag)->firstOrCreate(["name"=>$tag]);
+            $post->tags()->attach($tag_exist->id);
         }
         return new PostResource($post);
     }
@@ -67,13 +81,11 @@ class PostController extends Controller
     public function update(UpdatePostRequest $request, Post $post): PostResource
     {
         $post->update($request->validated());
-        foreach ($request->tags as $tag) {
-            $tag_exist = Tag::whereName($tag)->first();
-            if ($tag_exist) {
-                $post->tags()->attach($tag_exist->id);
-            } else {
-                $post->tags()->create($tag);
-            }
+        $tags = [];
+        preg_match_all('/#(\w+)/i', request('content'), $tags);
+        foreach ($tags[0] as $tag) {
+            $tag_exist = Tag::whereName($tag)->firstOrCreate(["name"=>$tag]);
+            $post->tags()->attach($tag_exist->id);
         }
         return new PostResource($post);
     }
