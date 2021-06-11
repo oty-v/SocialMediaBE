@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StorePostRequest;
-use App\Http\Requests\TaggedPostRequest;
 use App\Http\Requests\UpdatePostRequest;
 use App\Models\Tag;
 use App\Models\User;
@@ -14,9 +13,9 @@ use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class PostController extends Controller
 {
-    public function taggedPosts(TaggedPostRequest $request): AnonymousResourceCollection
+    public function taggedPosts(Tag $tag): AnonymousResourceCollection
     {
-        $posts = Post::whereHasTag($request->tag)->orderByDesc('id')->cursorPaginate(5);
+        $posts = Post::whereHasTag($tag->name)->orderByDesc('id')->cursorPaginate(5);
         return PostResource::collection($posts);
     }
 
