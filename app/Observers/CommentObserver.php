@@ -3,26 +3,33 @@
 namespace App\Observers;
 
 use App\Models\Comment;
+use App\Traits\HasTagTrait;
 
 class CommentObserver
 {
-    public function updating(Comment $comment)
+    use HasTagTrait;
+
+    public function created(Comment $comment)
     {
-        foreach ($comment->tags as $tag) {
-            if ($tag->posts->count() + $tag->comments->count() === 1) {
-                $tag->delete();
-            }
-        }
+        $this->attachTags($comment, request('body'));
+    }
+
+    public function updated(Comment $comment)
+    {
+        $tags = $comment->tags;
         $comment->tags()->detach();
+        foreach ($tags as $tag) {
+            $tag->delete();
+        }
+        $this->attachTags($comment, request('body'));
     }
 
     public function deleting(Comment $comment)
     {
-        foreach ($comment->tags as $tag) {
-            if ($tag->posts->count() + $tag->comments->count() === 1) {
-                $tag->delete();
-            }
-        }
+        $tags = $comment->tags;
         $comment->tags()->detach();
+        foreach ($tags as $tag) {
+            $tag->delete();
+        }
     }
 }

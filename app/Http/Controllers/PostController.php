@@ -10,24 +10,13 @@ use App\Models\User;
 use Exception;
 use App\Models\Post;
 use App\Http\Resources\PostResource;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class PostController extends Controller
 {
     public function taggedPosts(TaggedPostRequest $request): AnonymousResourceCollection
     {
-        $posts = Post::whereHas(
-            'tags',
-            function (Builder $query) {
-                $query->whereName(request('tag'));
-            }
-        )->orWhereHas(
-            'comments.tags',
-            function (Builder $query) {
-                $query->whereName(request('tag'));
-            }
-        )->orderByDesc('id')->cursorPaginate(5);
+        $posts = Post::whereHasTag($request->tag)->orderByDesc('id')->cursorPaginate(5);
         return PostResource::collection($posts);
     }
 
@@ -51,12 +40,6 @@ class PostController extends Controller
     public function store(StorePostRequest $request): PostResource
     {
         $post = $request->user()->posts()->create($request->validated());
-        $tags = [];
-        preg_match_all('/#(\w+)/i', request('content'), $tags);
-        foreach ($tags[0] as $tag) {
-            $tag_exist = Tag::whereName($tag)->firstOrCreate(["name"=>$tag]);
-            $post->tags()->attach($tag_exist->id);
-        }
         return new PostResource($post);
     }
 
@@ -81,12 +64,6 @@ class PostController extends Controller
     public function update(UpdatePostRequest $request, Post $post): PostResource
     {
         $post->update($request->validated());
-        $tags = [];
-        preg_match_all('/#(\w+)/i', request('content'), $tags);
-        foreach ($tags[0] as $tag) {
-            $tag_exist = Tag::whereName($tag)->firstOrCreate(["name"=>$tag]);
-            $post->tags()->attach($tag_exist->id);
-        }
         return new PostResource($post);
     }
 
@@ -97,7 +74,8 @@ class PostController extends Controller
      * @return Response
      * @throws Exception
      */
-    public function destroy(Post $post)
+    public
+    function destroy(Post $post)
     {
         $post->delete();
         return response()->noContent();

@@ -18,13 +18,18 @@ class Tag extends Model
         return $query->where("name", $name);
     }
 
+    public function taggable($related)
+    {
+        return $this->morphedByMany($related, 'taggable');
+    }
+
     public function posts()
     {
-        return $this->morphedByMany(Post::class, 'taggable');
+        return $this->taggable(Post::class);
     }
 
     public function comments()
     {
-        return $this->morphedByMany(Comment::class, 'taggable');
+        return $this->taggable(Comment::class);
     }
 }

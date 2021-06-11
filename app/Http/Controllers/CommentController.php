@@ -22,12 +22,7 @@ class CommentController extends Controller
     {
         $comment = $request->user()->comments()->make($request->validated());
         $comment = $post->comments()->save($comment);
-        $tags = [];
-        preg_match_all('/#(\w+)/i', request('body'), $tags);
-        foreach ($tags[0] as $tag) {
-            $tag_exist = Tag::whereName($tag)->firstOrCreate(["name"=>$tag]);
-            $comment->tags()->attach($tag_exist->id);
-        }
+
         return new CommentResource($comment);
     }
 
@@ -41,12 +36,6 @@ class CommentController extends Controller
     public function update(UpdateCommentRequest $request, Comment $comment): CommentResource
     {
         $comment->update($request->validated());
-        $tags = [];
-        preg_match_all('/#(\w+)/i', request('body'), $tags);
-        foreach ($tags[0] as $tag) {
-            $tag_exist = Tag::whereName($tag)->firstOrCreate(["name"=>$tag]);
-            $comment->tags()->attach($tag_exist->id);
-        }
         return new CommentResource($comment);
     }
 

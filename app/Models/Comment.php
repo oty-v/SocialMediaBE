@@ -2,12 +2,13 @@
 
 namespace App\Models;
 
+use App\Traits\HasTagTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Comment extends Model
 {
-    use HasFactory;
+    use HasFactory, HasTagTrait;
 
     protected $fillable = [
         'body',
@@ -21,10 +22,5 @@ class Comment extends Model
     public function post()
     {
         return $this->belongsTo(Post::class);
-    }
-
-    public function tags()
-    {
-        return $this->morphToMany(Tag::class, 'taggable');
     }
 }
