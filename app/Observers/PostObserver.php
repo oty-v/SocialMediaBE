@@ -3,15 +3,15 @@
 namespace App\Observers;
 
 use App\Models\Post;
-use App\Traits\HasTagTrait;
+use App\Traits\HasTag;
 
 class PostObserver
 {
-    use HasTagTrait;
+    use HasTag;
 
     public function created(Post $post)
     {
-        $this->attachTags($post, request('content'));
+        $this->parseTags($post, request('content'));
     }
 
     public function updated(Post $post)
@@ -21,7 +21,7 @@ class PostObserver
         foreach ($tags as $tag) {
             $tag->delete();
         }
-        $this->attachTags($post, request('content'));
+        $this->parseTags($post, request('content'));
     }
 
     public function deleting(Post $post)

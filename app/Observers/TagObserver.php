@@ -3,12 +3,15 @@
 namespace App\Observers;
 
 use App\Models\Tag;
+use App\Traits\HasTaggedEntities;
 
 class TagObserver
 {
+    use HasTaggedEntities;
+
     public function deleting(Tag $tag)
     {
-        if ($tag->posts->count() + $tag->comments->count() !== 0) {
+        if ($tag->hasTaggedEntities) {
             return false;
         }
     }

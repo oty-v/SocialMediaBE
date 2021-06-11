@@ -2,14 +2,14 @@
 
 namespace App\Models;
 
-use App\Traits\HasTagTrait;
+use App\Traits\HasRelationWithTags;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 
 class Post extends Model
 {
-    use HasFactory, HasTagTrait;
+    use HasFactory, HasRelationWithTags;
 
     /**
      * The attributes that are mass assignable.

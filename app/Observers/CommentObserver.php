@@ -3,15 +3,15 @@
 namespace App\Observers;
 
 use App\Models\Comment;
-use App\Traits\HasTagTrait;
+use App\Traits\HasTag;
 
 class CommentObserver
 {
-    use HasTagTrait;
+    use HasTag;
 
     public function created(Comment $comment)
     {
-        $this->attachTags($comment, request('body'));
+        $this->parseTags($comment, request('body'));
     }
 
     public function updated(Comment $comment)
@@ -21,7 +21,7 @@ class CommentObserver
         foreach ($tags as $tag) {
             $tag->delete();
         }
-        $this->attachTags($comment, request('body'));
+        $this->parseTags($comment, request('body'));
     }
 
     public function deleting(Comment $comment)
