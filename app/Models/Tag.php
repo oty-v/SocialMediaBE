@@ -18,18 +18,18 @@ class Tag extends Model
         return $query->where("name", $name);
     }
 
-    public function taggable($related)
+    public function hasTaggedEntities()
     {
-        return $this->morphedByMany($related, 'taggable');
+        return $this->posts->count() + $this->comments->count() !== 0;
     }
 
     public function posts()
     {
-        return $this->taggable(Post::class);
+        return $this->morphedByMany(Post::class, 'taggable');
     }
 
     public function comments()
     {
-        return $this->taggable(Comment::class);
+        return $this->morphedByMany(Comment::class, 'taggable');
     }
 }

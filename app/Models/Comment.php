@@ -2,13 +2,13 @@
 
 namespace App\Models;
 
-use App\Traits\HasRelationWithTags;
+use App\Traits\HasTag;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Comment extends Model
 {
-    use HasFactory, HasRelationWithTags;
+    use HasFactory, HasTag;
 
     protected $fillable = [
         'body',

@@ -6,14 +6,19 @@ use App\Models\Tag;
 
 trait HasTag
 {
-    protected static function parseTags($model, $request)
+    public function parseTags($value)
     {
-        $tags = [];
-        preg_match_all('/#(\w+)/i', $request, $tags);
-        $tagIdsToSync = [];
-        foreach ($tags[0] as $tag) {
-            array_push($tagIdsToSync, Tag::whereName($tag)->firstOrCreate(["name" => $tag])->id);
+        preg_match_all('/#(\w+)/i', $value, $parsedTags);
+        $tagsIdArray = [];
+        foreach ($parsedTags[0] as $parsedTag) {
+            $tagId = Tag::whereName($parsedTag)->firstOrCreate(["name" => $parsedTag])->id;
+            array_push($tagsIdArray, $tagId);
         }
-        $model->tags()->sync($tagIdsToSync);
+        $this->tags()->sync($tagsIdArray);
+    }
+
+    public function tags()
+    {
+        return $this->morphToMany(Tag::class, 'taggable');
     }
 }
