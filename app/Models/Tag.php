@@ -18,7 +18,7 @@ class Tag extends Model
         return $query->where("name", $name);
     }
 
-    public function hasTaggedEntities()
+    public function getHasTaggedEntitiesAttribute()
     {
         return $this->posts->count() + $this->comments->count() !== 0;
     }
