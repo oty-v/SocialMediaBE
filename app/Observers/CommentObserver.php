@@ -14,11 +14,10 @@ class CommentObserver
     public function updated(Comment $comment)
     {
         $tags = $comment->tags;
-        $comment->tags()->detach();
+        $comment->parseTags(request('body'));
         foreach ($tags as $tag) {
             $tag->delete();
         }
-        $comment->parseTags(request('body'));
     }
 
     public function deleting(Comment $comment)

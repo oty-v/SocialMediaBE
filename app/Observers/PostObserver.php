@@ -14,11 +14,10 @@ class PostObserver
     public function updated(Post $post)
     {
         $tags = $post->tags;
-        $post->tags()->detach();
+        $post->parseTags(request('content'));
         foreach ($tags as $tag) {
             $tag->delete();
         }
-        $post->parseTags(request('content'));
     }
 
     public function deleting(Post $post)

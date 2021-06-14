@@ -11,8 +11,9 @@ trait HasTag
         preg_match_all('/#(\w+)/i', $value, $parsedTags);
         $tagsIdArray = [];
         foreach ($parsedTags[0] as $parsedTag) {
-            $tagId = Tag::whereName($parsedTag)->firstOrCreate(["name" => $parsedTag])->id;
-            array_push($tagsIdArray, $tagId);
+            $tag = Tag::whereName($parsedTag)->firstOrCreate(["name" => $parsedTag]);
+            $this->tags()->sync($tagsIdArray);
+            array_push($tagsIdArray, $tag->id);
         }
         $this->tags()->sync($tagsIdArray);
     }
