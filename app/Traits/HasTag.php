@@ -12,7 +12,6 @@ trait HasTag
         $tagsIdArray = [];
         foreach ($parsedTags[0] as $parsedTag) {
             $tag = Tag::whereName($parsedTag)->firstOrCreate(["name" => $parsedTag]);
-            $this->tags()->sync($tagsIdArray);
             array_push($tagsIdArray, $tag->id);
         }
         $this->tags()->sync($tagsIdArray);
