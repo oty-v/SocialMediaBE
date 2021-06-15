@@ -4,13 +4,13 @@ namespace App\Traits;
 
 use App\Models\Tag;
 
-trait HasTag
+trait HasTags
 {
-    public function parseTags($value)
+    public function parseTags()
     {
-        preg_match_all('/#(\w+)/i', $value, $parsedTags);
+        preg_match_all('/#(\w+)/i', $this->content, $parsedTags);
         $tagsIdArray = [];
-        foreach ($parsedTags[0] as $parsedTag) {
+        foreach ($parsedTags[1] as $parsedTag) {
             $tag = Tag::whereName($parsedTag)->firstOrCreate(["name" => $parsedTag]);
             array_push($tagsIdArray, $tag->id);
         }

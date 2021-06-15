@@ -15,7 +15,7 @@ class Tag extends Model
 
     public function scopeWhereName($query, $name)
     {
-        return $query->where("name", $name);
+        return $name ? $query->where("name", $name) : $query;
     }
 
     public function getHasTaggedEntitiesAttribute()

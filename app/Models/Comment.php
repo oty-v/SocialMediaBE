@@ -2,16 +2,16 @@
 
 namespace App\Models;
 
-use App\Traits\HasTag;
+use App\Traits\HasTags;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Comment extends Model
 {
-    use HasFactory, HasTag;
+    use HasFactory, HasTags;
 
     protected $fillable = [
-        'body',
+        'content',
     ];
 
     public function user()

@@ -73,8 +73,7 @@ class PostController extends Controller
      * @return Response
      * @throws Exception
      */
-    public
-    function destroy(Post $post)
+    public function destroy(Post $post)
     {
         $post->delete();
         return response()->noContent();

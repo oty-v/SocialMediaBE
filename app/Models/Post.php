@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Traits\HasTag;
+use App\Traits\HasTags;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Hash;
 
 class Post extends Model
 {
-    use HasFactory, HasTag;
+    use HasFactory, HasTags;
 
     /**
      * The attributes that are mass assignable.

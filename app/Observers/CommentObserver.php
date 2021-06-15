@@ -8,21 +8,21 @@ class CommentObserver
 {
     public function created(Comment $comment)
     {
-        $comment->parseTags(request('body'));
+        $comment->parseTags();
     }
 
     public function updated(Comment $comment)
     {
-        $tags = $comment->tags;
-        $comment->parseTags(request('body'));
+        $tags = $comment->tags()->get();
+        $comment->parseTags();
         foreach ($tags as $tag) {
             $tag->delete();
         }
     }
 
-    public function deleting(Comment $comment)
+    public function deleted(Comment $comment)
     {
-        $tags = $comment->tags;
+        $tags = $comment->tags()->get();
         $comment->tags()->detach();
         foreach ($tags as $tag) {
             $tag->delete();
