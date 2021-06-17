@@ -9,12 +9,14 @@ class CommentObserver
     public function created(Comment $comment)
     {
         $comment->parseTags();
+        $comment->parseMentions();
     }
 
     public function updated(Comment $comment)
     {
         $tags = $comment->tags()->get();
         $comment->parseTags();
+        $comment->parseMentions();
         foreach ($tags as $tag) {
             $tag->delete();
         }
@@ -24,6 +26,7 @@ class CommentObserver
     {
         $tags = $comment->tags()->get();
         $comment->tags()->detach();
+        $comment->users()->detach();
         foreach ($tags as $tag) {
             $tag->delete();
         }
