@@ -16,10 +16,10 @@ trait HasMentions
                 array_push($mentionsIdArray, $user->id);
             }
         }
-        $this->users()->sync($mentionsIdArray);
+        $this->mentionedUsers()->sync($mentionsIdArray);
     }
 
-    public function users()
+    public function mentionedUsers()
     {
         return $this->morphToMany(User::class, 'mention');
     }

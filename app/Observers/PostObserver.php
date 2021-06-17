@@ -28,7 +28,7 @@ class PostObserver
     {
         $tags = $post->tags()->get();
         $post->tags()->detach();
-        $post->users()->detach();
+        $post->mentionedUsers()->detach();
         foreach ($tags as $tag) {
             $tag->delete();
         }
