@@ -7,6 +7,7 @@ use App\Http\Requests\UpdateCommentRequest;
 use App\Models\Comment;
 use App\Models\Post;
 use App\Http\Resources\CommentResource;
+use App\Models\Tag;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class CommentController extends Controller
@@ -21,6 +22,7 @@ class CommentController extends Controller
     {
         $comment = $request->user()->comments()->make($request->validated());
         $comment = $post->comments()->save($comment);
+
         return new CommentResource($comment);
     }
 

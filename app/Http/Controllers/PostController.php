@@ -4,15 +4,21 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StorePostRequest;
 use App\Http\Requests\UpdatePostRequest;
+use App\Models\Tag;
 use App\Models\User;
 use Exception;
-use Illuminate\Http\Request;
 use App\Models\Post;
 use App\Http\Resources\PostResource;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class PostController extends Controller
 {
+    public function taggedPosts(Tag $tag): AnonymousResourceCollection
+    {
+        $posts = Post::whereHasTag($tag->name)->orderByDesc('id')->cursorPaginate(5);
+        return PostResource::collection($posts);
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -20,7 +26,7 @@ class PostController extends Controller
      */
     public function index(User $user): AnonymousResourceCollection
     {
-        $posts = $user->posts()->orderBy('id', 'desc')->cursorPaginate(5);
+        $posts = $user->posts()->orderByDesc('id')->cursorPaginate(5);
         return PostResource::collection($posts);
     }
 
@@ -32,7 +38,8 @@ class PostController extends Controller
      */
     public function store(StorePostRequest $request): PostResource
     {
-        return new PostResource($request->user()->posts()->create($request->validated()));
+        $post = $request->user()->posts()->create($request->validated());
+        return new PostResource($post);
     }
 
     /**
