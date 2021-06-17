@@ -11,12 +11,14 @@ class PostObserver
     public function created(Post $post)
     {
         $post->parseTags();
+        $post->parseMentions();
     }
 
     public function updated(Post $post)
     {
         $tags = $post->tags()->get();
         $post->parseTags();
+        $post->parseMentions();
         foreach ($tags as $tag) {
             $tag->delete();
         }
@@ -26,6 +28,7 @@ class PostObserver
     {
         $tags = $post->tags()->get();
         $post->tags()->detach();
+        $post->mentionedUsers()->detach();
         foreach ($tags as $tag) {
             $tag->delete();
         }
