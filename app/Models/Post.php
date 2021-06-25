@@ -22,6 +22,16 @@ class Post extends Model
         'content',
     ];
 
+    public function scopeWhereHasUsers($query, $usersIdArray)
+    {
+        return $usersIdArray ? $query->whereHas(
+            'user',
+            function (Builder $query) use ($usersIdArray) {
+                $query->whereId($usersIdArray);
+            }
+        ) : $query;
+    }
+
     public function scopeWhereHasTag($query, $name)
     {
         return $name ? $query->whereHas(

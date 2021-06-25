@@ -31,4 +31,28 @@ class UserController extends Controller
     {
         return new UserResource($user);
     }
+
+    public function userFollowings(User $user): AnonymousResourceCollection
+    {
+        return UserResource::collection($user->followings);
+    }
+
+    public function userFollowers(User $user): AnonymousResourceCollection
+    {
+        return UserResource::collection($user->followers);
+    }
+
+    public function follow(User $user)
+    {
+        $followingsIdArray = auth()->user()->followings()->pluck('id');
+        $followingsIdArray->push($user->id);
+        auth()->user()->followings()->sync($followingsIdArray);
+        return response()->noContent();
+    }
+
+    public function unfollow(User $user)
+    {
+        auth()->user()->followings()->detach($user->id);
+        return response()->noContent();
+    }
 }

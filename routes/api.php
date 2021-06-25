@@ -41,7 +41,12 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::get("/", [UserController::class, 'index']);
         Route::get("/{user:username}", [UserController::class, 'show']);
         Route::get("/{user:username}/posts", [PostController::class, 'index']);
+        Route::get("/{user:username}/followings", [UserController::class, 'userFollowings']);
+        Route::get("/{user:username}/followers", [UserController::class, 'userFollowers']);
+        Route::post("/{user:username}/follow", [UserController::class, 'follow']);
+        Route::post("/{user:username}/unfollow", [UserController::class, 'unfollow']);
     });
+    Route::get("/followings/posts", [PostController::class, 'followingsUsersPosts']);
     Route::get("/tags/{tag:name}/posts", [PostController::class, 'taggedPosts']);
     Route::get('/profile', [ProfileController::class, 'index']);
     Route::put('/profiles/{profile}', [ProfileController::class, 'update']);

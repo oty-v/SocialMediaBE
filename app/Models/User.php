@@ -47,7 +47,12 @@ class User extends Authenticatable
 
     public function scopeWhereUsername($query, $userName)
     {
-        return $userName ? $query->where("username", "LIKE", "%".$userName."%") : $query;
+        return $userName ? $query->where("username", "LIKE", "%" . $userName . "%") : $query;
+    }
+
+    public function scopeWhereId($query, $usersIdArray)
+    {
+        return $usersIdArray ? $query->whereIn("id", $usersIdArray) : $query;
     }
 
     public function profile()
@@ -63,6 +68,16 @@ class User extends Authenticatable
     public function comments()
     {
         return $this->hasMany(Comment::class);
+    }
+
+    public function followings()
+    {
+        return $this->belongsToMany(User::class, 'followers', 'follower_id', 'following_id');
+    }
+
+    public function followers()
+    {
+        return $this->belongsToMany(User::class, 'followers', 'following_id', 'follower_id');
     }
 
     public function setPasswordAttribute($value)
