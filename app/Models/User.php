@@ -44,15 +44,9 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-
     public function scopeWhereUsername($query, $userName)
     {
         return $userName ? $query->where("username", "LIKE", "%" . $userName . "%") : $query;
-    }
-
-    public function scopeWhereId($query, $usersIdArray)
-    {
-        return $usersIdArray ? $query->whereIn("id", $usersIdArray) : $query;
     }
 
     public function profile()

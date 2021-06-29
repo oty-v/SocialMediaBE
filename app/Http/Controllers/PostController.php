@@ -13,10 +13,14 @@ use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class PostController extends Controller
 {
-    public function followingsUsersPosts()
+    public function followingsUsersPosts(): AnonymousResourceCollection
     {
-        $usersIdArray = auth()->user()->followings()->pluck('id');
-        $posts = Post::whereHasUsers($usersIdArray)->orderByDesc('id')->cursorPaginate(5);
+        $AuthUserId = auth()->user()->id;
+        $posts = Post::join('followers', function ($join) use ($AuthUserId) {
+            $join->on('posts.user_id', 'followers.following_id')
+                ->where('followers.follower_id', $AuthUserId);
+        })
+            ->orderByDesc('id')->cursorPaginate(5);
         return PostResource::collection($posts);
     }
 
