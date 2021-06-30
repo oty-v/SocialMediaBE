@@ -37,14 +37,6 @@ class Post extends Model
         ) : $query;
     }
 
-    public function scopeFollowings($query, $userId)
-    {
-        return $userId ? $query->join('followers', function ($join) use ($userId) {
-            $join->on('posts.user_id', 'followers.following_id')
-                ->where('followers.follower_id', $userId);
-        }) : $query;
-    }
-
     public function user()
     {
         return $this->belongsTo(User::class);

@@ -76,9 +76,15 @@ class User extends Authenticatable
 
     public function follow($user)
     {
-        $followingsIdArray = $this->followings()->pluck('id');
-        $followingsIdArray->push($user->id);
-        $this->followings()->sync($followingsIdArray);
+        $this->followings()->syncWithoutDetaching([$user->id]);
+    }
+
+    public function followingsPosts()
+    {
+        return Post::join('followers', function ($join) {
+            $join->on('posts.user_id', 'followers.following_id')
+                ->where('followers.follower_id', $this->id);
+        });
     }
 
     public function setPasswordAttribute($value)

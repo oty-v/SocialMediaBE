@@ -15,8 +15,7 @@ class PostController extends Controller
 {
     public function followingsUsersPosts(): AnonymousResourceCollection
     {
-        $authUserId = auth()->user()->id;
-        $posts = Post::followings($authUserId)->orderByDesc('id')->cursorPaginate(5);
+        $posts = auth()->user()->followingsPosts()->orderByDesc('id')->cursorPaginate(5);
         return PostResource::collection($posts);
     }
 
