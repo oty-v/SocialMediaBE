@@ -81,10 +81,7 @@ class User extends Authenticatable
 
     public function followingsPosts()
     {
-        return Post::join('followers', function ($join) {
-            $join->on('posts.user_id', 'followers.following_id')
-                ->where('followers.follower_id', $this->id);
-        });
+        return $this->belongsToMany(Post::class, 'followers', 'follower_id', 'following_id', '', 'user_id');
     }
 
     public function setPasswordAttribute($value)
