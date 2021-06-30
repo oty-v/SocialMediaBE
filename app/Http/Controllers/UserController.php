@@ -44,9 +44,7 @@ class UserController extends Controller
 
     public function follow(User $user)
     {
-        $followingsIdArray = auth()->user()->followings()->pluck('id');
-        $followingsIdArray->push($user->id);
-        auth()->user()->followings()->sync($followingsIdArray);
+        auth()->user()->follow($user);
         return response()->noContent();
     }
 

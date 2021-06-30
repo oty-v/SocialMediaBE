@@ -15,12 +15,8 @@ class PostController extends Controller
 {
     public function followingsUsersPosts(): AnonymousResourceCollection
     {
-        $AuthUserId = auth()->user()->id;
-        $posts = Post::join('followers', function ($join) use ($AuthUserId) {
-            $join->on('posts.user_id', 'followers.following_id')
-                ->where('followers.follower_id', $AuthUserId);
-        })
-            ->orderByDesc('id')->cursorPaginate(5);
+        $authUserId = auth()->user()->id;
+        $posts = Post::followings($authUserId)->orderByDesc('id')->cursorPaginate(5);
         return PostResource::collection($posts);
     }
 

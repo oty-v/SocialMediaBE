@@ -74,6 +74,13 @@ class User extends Authenticatable
         return $this->belongsToMany(User::class, 'followers', 'following_id', 'follower_id');
     }
 
+    public function follow($user)
+    {
+        $followingsIdArray = $this->followings()->pluck('id');
+        $followingsIdArray->push($user->id);
+        $this->followings()->sync($followingsIdArray);
+    }
+
     public function setPasswordAttribute($value)
     {
         $this->attributes['password'] = Hash::make($value);

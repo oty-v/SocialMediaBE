@@ -22,16 +22,6 @@ class Post extends Model
         'content',
     ];
 
-    public function scopeWhereHasUsers($query, $usersIdArray)
-    {
-        return $usersIdArray ? $query->whereHas(
-            'user',
-            function (Builder $query) use ($usersIdArray) {
-                $query->whereId($usersIdArray);
-            }
-        ) : $query;
-    }
-
     public function scopeWhereHasTag($query, $name)
     {
         return $name ? $query->whereHas(
@@ -45,6 +35,14 @@ class Post extends Model
                 $query->whereName($name);
             }
         ) : $query;
+    }
+
+    public function scopeFollowings($query, $userId)
+    {
+        return $userId ? $query->join('followers', function ($join) use ($userId) {
+            $join->on('posts.user_id', 'followers.following_id')
+                ->where('followers.follower_id', $userId);
+        }) : $query;
     }
 
     public function user()
