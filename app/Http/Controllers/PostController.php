@@ -13,6 +13,12 @@ use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class PostController extends Controller
 {
+    public function followingsUsersPosts(): AnonymousResourceCollection
+    {
+        $posts = auth()->user()->followingsPosts()->orderByDesc('id')->cursorPaginate(5);
+        return PostResource::collection($posts);
+    }
+
     public function taggedPosts(Tag $tag): AnonymousResourceCollection
     {
         $posts = Post::whereHasTag($tag->name)->orderByDesc('id')->cursorPaginate(5);

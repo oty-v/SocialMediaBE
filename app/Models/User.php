@@ -44,10 +44,9 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-
     public function scopeWhereUsername($query, $userName)
     {
-        return $userName ? $query->where("username", "LIKE", "%".$userName."%") : $query;
+        return $userName ? $query->where("username", "LIKE", "%" . $userName . "%") : $query;
     }
 
     public function profile()
@@ -63,6 +62,26 @@ class User extends Authenticatable
     public function comments()
     {
         return $this->hasMany(Comment::class);
+    }
+
+    public function followings()
+    {
+        return $this->belongsToMany(User::class, 'followers', 'follower_id', 'following_id');
+    }
+
+    public function followers()
+    {
+        return $this->belongsToMany(User::class, 'followers', 'following_id', 'follower_id');
+    }
+
+    public function follow($user)
+    {
+        $this->followings()->syncWithoutDetaching([$user->id]);
+    }
+
+    public function followingsPosts()
+    {
+        return $this->belongsToMany(Post::class, 'followers', 'follower_id', 'following_id', '', 'user_id');
     }
 
     public function setPasswordAttribute($value)
