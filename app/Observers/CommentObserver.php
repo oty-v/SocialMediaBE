@@ -27,6 +27,7 @@ class CommentObserver
         $tags = $comment->tags()->get();
         $comment->tags()->detach();
         $comment->mentionedUsers()->detach();
+        $comment->usersWhoLiked()->detach();
         foreach ($tags as $tag) {
             $tag->delete();
         }
