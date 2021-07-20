@@ -3,6 +3,7 @@
 namespace App\Traits;
 
 use App\Models\User;
+use App\Events\MentionEvent;
 
 trait HasMentions
 {
@@ -14,6 +15,9 @@ trait HasMentions
             $user = User::firstWhere('username', $parsedMention);
             if($user){
                 array_push($mentionsIdArray, $user->id);
+                $author = $this->user->username;
+                $post = $this->post->id ?? $this->id;
+                event(new MentionEvent($user->username, $author, $post));
             }
         }
         $this->mentionedUsers()->sync($mentionsIdArray);
