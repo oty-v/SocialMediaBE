@@ -35,6 +35,10 @@ class MentionEvent implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new PrivateChannel("mentioned-" . $this->mentioned);
+        return new Channel("mentioned-" . $this->mentioned);
+    }
+    public function broadcastAs()
+    {
+        return "mention";
     }
 }
