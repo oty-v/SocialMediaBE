@@ -13,15 +13,27 @@ use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class PostController extends Controller
 {
+    public function like(Post $post)
+    {
+        $post->like(auth()->user());
+        return response()->noContent();
+    }
+
+    public function unlike(Post $post)
+    {
+        $post->unlike(auth()->user());
+        return response()->noContent();
+    }
+
     public function followingsUsersPosts(): AnonymousResourceCollection
     {
-        $posts = auth()->user()->followingsPosts()->orderByDesc('id')->cursorPaginate(5);
+        $posts = auth()->user()->followingsPosts()->orderByDesc('id')->cursorPaginate(10);
         return PostResource::collection($posts);
     }
 
     public function taggedPosts(Tag $tag): AnonymousResourceCollection
     {
-        $posts = Post::whereHasTag($tag->name)->orderByDesc('id')->cursorPaginate(5);
+        $posts = Post::whereHasTag($tag->name)->orderByDesc('id')->cursorPaginate(10);
         return PostResource::collection($posts);
     }
 
@@ -32,7 +44,7 @@ class PostController extends Controller
      */
     public function index(User $user): AnonymousResourceCollection
     {
-        $posts = $user->posts()->orderByDesc('id')->cursorPaginate(5);
+        $posts = $user->posts()->orderByDesc('id')->cursorPaginate(10);
         return PostResource::collection($posts);
     }
 

@@ -19,6 +19,8 @@ class CommentResource extends JsonResource
             'author' => new UserResource($this->user),
             'tags' => TagResource::collection($this->tags),
             'mentionedUsers' => UserResource::collection($this->mentionedUsers),
+            'numberOfLikes' => $this->countLikes(),
+            'userLiked' => $this->userLikes(auth()->user()->username),
             'content' => $this->content,
             'created_at' => $this->created_at,
         ];

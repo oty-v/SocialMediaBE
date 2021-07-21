@@ -12,6 +12,18 @@ use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class CommentController extends Controller
 {
+    public function like(Comment $comment)
+    {
+        $comment->like(auth()->user());
+        return response()->noContent();
+    }
+
+    public function unlike(Comment $comment)
+    {
+        $comment->unlike(auth()->user());
+        return response()->noContent();
+    }
+
     public function index(Post $post): AnonymousResourceCollection
     {
         return CommentResource::collection($post->comments);
