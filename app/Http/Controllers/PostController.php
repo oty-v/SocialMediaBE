@@ -15,13 +15,13 @@ class PostController extends Controller
 {
     public function followingsUsersPosts(): AnonymousResourceCollection
     {
-        $posts = auth()->user()->followingsPosts()->orderByDesc('id')->cursorPaginate(5);
+        $posts = auth()->user()->followingsPosts()->orderByDesc('id')->cursorPaginate(10);
         return PostResource::collection($posts);
     }
 
     public function taggedPosts(Tag $tag): AnonymousResourceCollection
     {
-        $posts = Post::whereHasTag($tag->name)->orderByDesc('id')->cursorPaginate(5);
+        $posts = Post::whereHasTag($tag->name)->orderByDesc('id')->cursorPaginate(10);
         return PostResource::collection($posts);
     }
 
@@ -32,7 +32,7 @@ class PostController extends Controller
      */
     public function index(User $user): AnonymousResourceCollection
     {
-        $posts = $user->posts()->orderByDesc('id')->cursorPaginate(5);
+        $posts = $user->posts()->orderByDesc('id')->cursorPaginate(10);
         return PostResource::collection($posts);
     }
 
