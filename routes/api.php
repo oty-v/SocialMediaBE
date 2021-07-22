@@ -6,6 +6,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\NotificationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -45,6 +46,11 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::get("/{user:username}/followers", [UserController::class, 'userFollowers']);
         Route::post("/{user:username}/follow", [UserController::class, 'follow']);
         Route::post("/{user:username}/unfollow", [UserController::class, 'unfollow']);
+    });
+    Route::group(['prefix' => '/notifications'], function () {
+        Route::get('/', [NotificationController::class, 'index']);
+        Route::post("/{notification}", [NotificationController::class, 'markRead']);
+        Route::post("/", [NotificationController::class, 'markReadAll']);
     });
     Route::get("/followings/posts", [PostController::class, 'followingsUsersPosts']);
     Route::get("/tags/{tag:name}/posts", [PostController::class, 'taggedPosts']);
